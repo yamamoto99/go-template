@@ -1,10 +1,10 @@
 package handler
 
 import (
+	"github.com/labstack/echo/v4"
+
 	"tmp/app/internal/entity"
 	"tmp/app/internal/usecase"
-
-	"github.com/labstack/echo/v4"
 )
 
 type WelcomeHandler interface {
