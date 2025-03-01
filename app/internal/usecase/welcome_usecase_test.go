@@ -11,14 +11,12 @@ import (
 
 	"tmp/app/internal/entity"
 	"tmp/app/internal/usecase"
-	appmock "tmp/app/test/mock"
+	appmock "tmp/app/test/mock/repository"
 )
 
 func TestWelcomeUsecase_GetRandomUser(t *testing.T) {
-	// モックの準備
 	mockRepo := new(appmock.WelcomeRepositoryMock)
 
-	// テストデータ
 	users := []entity.User{
 		{
 			ID:        "test-id-1",
@@ -36,24 +34,17 @@ func TestWelcomeUsecase_GetRandomUser(t *testing.T) {
 		},
 	}
 
-	// モックの振る舞いを設定
 	e := echo.New()
 	ctx := e.NewContext(nil, nil)
 	mockRepo.On("GetAllUsers", testifymock.Anything).Return(users, nil)
 
-	// テスト対象のユースケースを初期化
 	uc := usecase.NewWelcomeUsecase(mockRepo)
 
-	// テスト実行
 	user, err := uc.GetRandomUser(ctx)
 
-	// アサーション
 	assert.NoError(t, err)
 	assert.NotNil(t, user)
-	// ランダムなユーザーが返されるため、いずれかのユーザーと一致することを確認
 	assert.Contains(t, []string{"test-id-1", "test-id-2"}, user.ID)
-
-	// モックが期待通り呼ばれたことを確認
 	mockRepo.AssertExpectations(t)
 }
 

@@ -7,12 +7,10 @@ import (
 	"tmp/app/internal/entity"
 )
 
-// WelcomeUsecaseMock はWelcomeUsecaseのモックです
 type WelcomeUsecaseMock struct {
 	mock.Mock
 }
 
-// GetRandomUser はGetRandomUserメソッドのモックです
 func (m *WelcomeUsecaseMock) GetRandomUser(c echo.Context) (*entity.User, error) {
 	args := m.Called(c)
 

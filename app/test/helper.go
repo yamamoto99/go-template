@@ -2,7 +2,6 @@ package test
 
 import (
 	"log"
-	"os"
 	"testing"
 	"time"
 
@@ -15,7 +14,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// loadEnvFile は環境変数ファイルを読み込みます
 func loadEnvFile(t *testing.T) {
 	err := godotenv.Load("../../../.env")
 	if err != nil {
@@ -23,7 +21,6 @@ func loadEnvFile(t *testing.T) {
 	}
 }
 
-// SetupTestDB はテスト用のDBをセットアップします
 func SetupTestDB(t *testing.T) *gorm.DB {
 	loadEnvFile(t)
 
@@ -33,7 +30,6 @@ func SetupTestDB(t *testing.T) *gorm.DB {
 	return dbConn
 }
 
-// CleanupDB はテスト後にDBをクリーンアップします
 func CleanupDB(t *testing.T, dbConn *gorm.DB) {
 	db.CleanupTestDB(dbConn)
 	sqlDB, err := dbConn.DB()
@@ -43,7 +39,6 @@ func CleanupDB(t *testing.T, dbConn *gorm.DB) {
 	sqlDB.Close()
 }
 
-// SeedTestUser はテスト用のユーザーデータを作成します
 func SeedTestUser(t *testing.T, dbConn *gorm.DB) entity.User {
 	user := entity.User{
 		ID:        "test-id",
@@ -58,21 +53,4 @@ func SeedTestUser(t *testing.T, dbConn *gorm.DB) entity.User {
 	}
 
 	return user
-}
-
-// SetupEnv はテスト環境変数をセットアップします
-func SetupEnv(t *testing.T) {
-	loadEnvFile(t)
-
-	// 環境変数が正しく設定されているか確認
-	requiredEnvVars := []string{
-		"TEST_DB_USER", "TEST_DB_PASSWORD", "TEST_DB_HOST",
-		"TEST_DB_PORT", "TEST_DB_NAME",
-	}
-
-	for _, envVar := range requiredEnvVars {
-		if os.Getenv(envVar) == "" {
-			t.Fatalf("Required environment variable %s is not set", envVar)
-		}
-	}
 }

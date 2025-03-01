@@ -7,12 +7,10 @@ import (
 	"tmp/app/internal/entity"
 )
 
-// WelcomeRepositoryMock はWelcomeRepositoryのモックです
 type WelcomeRepositoryMock struct {
 	mock.Mock
 }
 
-// GetAllUsers はGetAllUsersメソッドのモックです
 func (m *WelcomeRepositoryMock) GetAllUsers(c echo.Context) ([]entity.User, error) {
 	args := m.Called(c)
 

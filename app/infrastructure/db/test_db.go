@@ -9,7 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// NewTestDB はテスト用のデータベース接続を作成します
 func NewTestDB() *gorm.DB {
 	url := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		os.Getenv("TEST_DB_HOST"),
@@ -25,8 +24,6 @@ func NewTestDB() *gorm.DB {
 	return db
 }
 
-// CleanupTestDB はテスト用のデータベースをクリーンアップします
 func CleanupTestDB(db *gorm.DB) {
-	// テーブルのデータをクリアする
 	db.Exec("DELETE FROM users")
 }
