@@ -1,4 +1,4 @@
-.PHONY: all up down seed prune fmt migrate help
+.PHONY: all up down seed prune fmt migrate help test test-setup test-repository test-usecase test-handler test-all test-cleanup
 
 # Default target
 .DEFAULT_GOAL := help
@@ -27,5 +27,24 @@ prune: ## Remove dangling images
 fmt: ## Format all Go code files
 	@go fmt ./...
 
+test-setup: ## Setup test environment
+	@docker-compose up -d test-db
+	@go run app/cmd/migrate_test/main.go
+
+test-repository: test-setup ## Run repository tests
+	@go test -v ./app/internal/repository/...
+
+test-usecase: ## Run usecase tests
+	@go test -v ./app/internal/usecase/...
+
+test-handler: ## Run handler tests
+	@go test -v ./app/internal/handler/...
+
+test-all: ## Run all tests
+	@go test -v ./app/internal/repository/... ./app/internal/usecase/... ./app/internal/handler/...
+
+test-cleanup: ## Cleanup test environment
+	@docker-compose stop test-db
+
 help: ## Display this help message
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(GREEN)%-8s$(RESET) %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(GREEN)%-15s$(RESET) %s\n", $$1, $$2}'
