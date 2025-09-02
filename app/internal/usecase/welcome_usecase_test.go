@@ -19,14 +19,14 @@ func TestWelcomeUsecase_GetRandomUser(t *testing.T) {
 
 	users := []entity.User{
 		{
-			ID:        "test-id-1",
+			ID:        1,
 			Name:      "Test User 1",
 			Email:     "test1@example.com",
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
 		},
 		{
-			ID:        "test-id-2",
+			ID:        2,
 			Name:      "Test User 2",
 			Email:     "test2@example.com",
 			CreatedAt: time.Now(),
@@ -44,7 +44,7 @@ func TestWelcomeUsecase_GetRandomUser(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.NotNil(t, user)
-	assert.Contains(t, []string{"test-id-1", "test-id-2"}, user.ID)
+	assert.Contains(t, []int{1, 2}, user.ID)
 	mockRepo.AssertExpectations(t)
 }
 

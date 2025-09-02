@@ -21,7 +21,7 @@ func TestWelcomeHandler_GetRandomUser(t *testing.T) {
 	mockUsecase := new(appmock.WelcomeUsecaseMock)
 
 	user := &entity.User{
-		ID:        "test-id",
+		ID:        1,
 		Name:      "Test User",
 		Email:     "test@example.com",
 		CreatedAt: time.Now(),

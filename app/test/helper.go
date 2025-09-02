@@ -8,7 +8,6 @@ import (
 	"gorm.io/gorm"
 
 	"tmp/app/infrastructure/db"
-	"tmp/app/infrastructure/migrate"
 	"tmp/app/internal/entity"
 
 	"github.com/joho/godotenv"
@@ -25,13 +24,17 @@ func SetupTestDB(t *testing.T) *gorm.DB {
 	loadEnvFile(t)
 
 	dbConn := db.NewTestDB()
-	migrate.RunMigrations(dbConn)
-	db.CleanupTestDB(dbConn)
-	return dbConn
+	tx := dbConn.Begin()
+	if tx.Error != nil {
+		t.Fatalf("Error beginning test transaction: %v", tx.Error)
+	}
+	return tx
 }
 
 func CleanupDB(t *testing.T, dbConn *gorm.DB) {
-	db.CleanupTestDB(dbConn)
+	if err := dbConn.Rollback().Error; err != nil {
+		t.Fatalf("Error rolling back test transaction: %v", err)
+	}
 	sqlDB, err := dbConn.DB()
 	if err != nil {
 		t.Fatalf("Error getting DB instance: %v", err)
@@ -41,7 +44,6 @@ func CleanupDB(t *testing.T, dbConn *gorm.DB) {
 
 func SeedTestUser(t *testing.T, dbConn *gorm.DB) entity.User {
 	user := entity.User{
-		ID:        "test-id",
 		Name:      "Test User",
 		Email:     "test@example.com",
 		CreatedAt: time.Now(),

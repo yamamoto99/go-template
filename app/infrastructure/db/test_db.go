@@ -25,5 +25,11 @@ func NewTestDB() *gorm.DB {
 }
 
 func CleanupTestDB(db *gorm.DB) {
-	db.Exec("DELETE FROM users")
+	if err := db.Exec("DROP SCHEMA public CASCADE").Error; err != nil {
+		log.Printf("cleanup drop schema error: %v", err)
+		return
+	}
+	if err := db.Exec("CREATE SCHEMA public").Error; err != nil {
+		log.Printf("cleanup create schema error: %v", err)
+	}
 }

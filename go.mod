@@ -5,6 +5,7 @@ go 1.23
 toolchain go1.23.6
 
 require (
+	github.com/golang-migrate/migrate/v4 v4.17.1
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/labstack/gommon v0.4.2
