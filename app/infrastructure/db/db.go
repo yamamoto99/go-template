@@ -24,6 +24,20 @@ func NewDB() *gorm.DB {
 	return db
 }
 
+func NewTestDB() *gorm.DB {
+	url := fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
+		os.Getenv("TEST_DB_USER"),
+		os.Getenv("TEST_DB_PASSWORD"),
+		os.Getenv("TEST_DB_HOST"),
+		os.Getenv("TEST_DB_PORT"),
+		os.Getenv("TEST_DB_NAME"))
+	db, err := gorm.Open(postgres.Open(url), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("🔴 Error connecting to database: %s", err)
+	}
+	return db
+}
+
 func CloseDB(db *gorm.DB) {
 	sqlDB, _ := db.DB()
 	if err := sqlDB.Close(); err != nil {

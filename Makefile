@@ -19,9 +19,6 @@ migrate-up: ## Run database migrations
 	@echo "--- Applying database migrations ---"
 	@migrate -path app/infrastructure/db/migrations -database "postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable" up
 
-prune: ## Remove dangling images
-	docker image prune -f
-
 fmt: ## Format all Go code files
 	@go fmt ./...
 
@@ -43,9 +40,6 @@ test-handler: ## Run handler tests
 
 test-all: ## Run all tests
 	@go test -v ./app/internal/repository/... ./app/internal/usecase/... ./app/internal/handler/...
-
-test-cleanup: ## Cleanup test environment
-	docker compose stop test-db
 
 help: ## Display this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(GREEN)%-15s$(RESET) %s\n", $$1, $$2}'
