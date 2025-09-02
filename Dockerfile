@@ -6,7 +6,7 @@ COPY . .
 RUN go mod download
 RUN apt-get update && apt-get install -y postgresql-client
 
-WORKDIR /src/app/cmd/server
+WORKDIR /src/app/cmd
 
 RUN go build -o /main .
 
