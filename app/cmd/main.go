@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
@@ -29,8 +29,10 @@ const (
 )
 
 func main() {
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
+
 	if err := run(); err != nil {
-		log.Println(err)
+		slog.Error("startup failed", "err", err)
 		os.Exit(1)
 	}
 }
@@ -51,7 +53,7 @@ func run() error {
 	}
 	defer func() {
 		if err := db.CloseDB(dbConnection); err != nil {
-			log.Println(err)
+			slog.Error("close db", "err", err)
 		}
 	}()
 
@@ -81,7 +83,7 @@ func run() error {
 		}
 		return nil
 	case <-ctx.Done():
-		log.Println("shutdown signal received")
+		slog.Info("shutdown signal received")
 	}
 
 	shutdownCtx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)

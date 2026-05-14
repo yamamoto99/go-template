@@ -2,7 +2,7 @@ package db
 
 import (
 	"fmt"
-	"log"
+	"log/slog"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -15,7 +15,7 @@ func NewDB(cfg config.DBConfig) (*gorm.DB, error) {
 	if err != nil {
 		return nil, fmt.Errorf("connect db: %w", err)
 	}
-	log.Println("[Info] Connected to database")
+	slog.Info("connected to database")
 	return db, nil
 }
 
@@ -24,7 +24,7 @@ func NewTestDB(cfg config.DBConfig) (*gorm.DB, error) {
 	if err != nil {
 		return nil, fmt.Errorf("connect test db: %w", err)
 	}
-	log.Println("[Info] Connected to test database")
+	slog.Info("connected to test database")
 	return db, nil
 }
 
@@ -36,6 +36,6 @@ func CloseDB(db *gorm.DB) error {
 	if err := sqlDB.Close(); err != nil {
 		return fmt.Errorf("close db: %w", err)
 	}
-	log.Println("[Info] Database connection closed")
+	slog.Info("database connection closed")
 	return nil
 }
