@@ -10,7 +10,7 @@ services:
       db:
         condition: service_healthy
   db:
-    image: postgres:latest
+    image: postgres:17
     container_name: postgres
     ports:
       - 5432:5432
@@ -26,7 +26,7 @@ services:
       timeout: 5s
       retries: 5
   test-db:
-    image: postgres:latest
+    image: postgres:17
     container_name: test-db
     ports:
       - "5433:5432"

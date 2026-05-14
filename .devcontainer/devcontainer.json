@@ -1,0 +1,31 @@
+{
+	"name": "go-template",
+	"dockerComposeFile": [
+		"../docker-compose.yml",
+		"docker-compose.extend.yml"
+	],
+	"service": "dev",
+	"workspaceFolder": "/workspace",
+	"forwardPorts": [8080],
+	"postCreateCommand": "go mod download",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"golang.go",
+				"ms-azuretools.vscode-docker",
+				"eamodio.gitlens",
+				"anthropic.claude-code"
+			],
+			"settings": {
+				"go.useLanguageServer": true,
+				"[go]": {
+					"editor.formatOnSave": true,
+					"editor.codeActionsOnSave": {
+						"source.organizeImports": "explicit"
+					}
+				}
+			}
+		}
+	},
+	"remoteUser": "vscode"
+}
