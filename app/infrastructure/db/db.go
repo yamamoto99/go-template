@@ -3,20 +3,15 @@ package db
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"github.com/yamamoto99/go-template/app/infrastructure/config"
 )
 
-func NewDB() (*gorm.DB, error) {
-	url := fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"),
-		os.Getenv("DB_NAME"))
-	db, err := gorm.Open(postgres.Open(url), &gorm.Config{})
+func NewDB(cfg config.DBConfig) (*gorm.DB, error) {
+	db, err := gorm.Open(postgres.Open(cfg.DSN()), &gorm.Config{})
 	if err != nil {
 		return nil, fmt.Errorf("connect db: %w", err)
 	}
@@ -24,14 +19,8 @@ func NewDB() (*gorm.DB, error) {
 	return db, nil
 }
 
-func NewTestDB() (*gorm.DB, error) {
-	url := fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
-		os.Getenv("TEST_DB_USER"),
-		os.Getenv("TEST_DB_PASSWORD"),
-		os.Getenv("TEST_DB_HOST"),
-		os.Getenv("TEST_DB_PORT"),
-		os.Getenv("TEST_DB_NAME"))
-	db, err := gorm.Open(postgres.Open(url), &gorm.Config{})
+func NewTestDB(cfg config.DBConfig) (*gorm.DB, error) {
+	db, err := gorm.Open(postgres.Open(cfg.DSN()), &gorm.Config{})
 	if err != nil {
 		return nil, fmt.Errorf("connect test db: %w", err)
 	}

@@ -1,0 +1,33 @@
+# VCS
+.git
+.gitignore
+.gitattributes
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Editor / IDE
+.vscode
+.idea
+*.swp
+
+# Dev tooling (not needed in the production image)
+.devcontainer
+.air.toml
+tmp
+bin
+out
+
+# Docs / meta
+docs
+*.md
+LICENSE
+
+# CI
+.github
+
+# OS junk
+.DS_Store
+Thumbs.db

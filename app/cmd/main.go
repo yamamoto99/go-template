@@ -13,6 +13,7 @@ import (
 
 	"github.com/joho/godotenv"
 
+	"github.com/yamamoto99/go-template/app/infrastructure/config"
 	"github.com/yamamoto99/go-template/app/infrastructure/db"
 	"github.com/yamamoto99/go-template/app/internal/handler"
 	"github.com/yamamoto99/go-template/app/internal/repository"
@@ -30,11 +31,16 @@ func main() {
 }
 
 func run() error {
-	if err := godotenv.Load(); err != nil {
+	if err := godotenv.Load(); err != nil && !errors.Is(err, os.ErrNotExist) {
 		return fmt.Errorf("load .env: %w", err)
 	}
 
-	dbConnection, err := db.NewDB()
+	cfg, err := config.Load()
+	if err != nil {
+		return err
+	}
+
+	dbConnection, err := db.NewDB(cfg.DB)
 	if err != nil {
 		return err
 	}

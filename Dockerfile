@@ -1,13 +1,22 @@
-FROM golang:1.26
+FROM golang:1.26 AS builder
 
 WORKDIR /src
 
-COPY . .
+COPY go.mod go.sum ./
 RUN go mod download
-RUN apt-get update && apt-get install -y postgresql-client
 
-RUN go build -o /src/main ./app/cmd
+COPY . .
+
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /out/main ./app/cmd
+
+FROM gcr.io/distroless/static-debian12:nonroot
+
+WORKDIR /app
+
+COPY --from=builder /out/main /app/main
 
 EXPOSE 8080
 
-CMD ["/src/main"]
+USER nonroot:nonroot
+
+ENTRYPOINT ["/app/main"]
