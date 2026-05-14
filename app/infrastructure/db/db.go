@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewDB() *gorm.DB {
+func NewDB() (*gorm.DB, error) {
 	url := fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
@@ -18,13 +18,13 @@ func NewDB() *gorm.DB {
 		os.Getenv("DB_NAME"))
 	db, err := gorm.Open(postgres.Open(url), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("🔴 Error connecting to database: %s", err)
+		return nil, fmt.Errorf("connect db: %w", err)
 	}
-	log.Println("🟢 Connected to database")
-	return db
+	log.Println("[Info] Connected to database")
+	return db, nil
 }
 
-func NewTestDB() *gorm.DB {
+func NewTestDB() (*gorm.DB, error) {
 	url := fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
 		os.Getenv("TEST_DB_USER"),
 		os.Getenv("TEST_DB_PASSWORD"),
@@ -33,15 +33,20 @@ func NewTestDB() *gorm.DB {
 		os.Getenv("TEST_DB_NAME"))
 	db, err := gorm.Open(postgres.Open(url), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("🔴 Error connecting to database: %s", err)
+		return nil, fmt.Errorf("connect test db: %w", err)
 	}
-	return db
+	log.Println("[Info] Connected to test database")
+	return db, nil
 }
 
-func CloseDB(db *gorm.DB) {
-	sqlDB, _ := db.DB()
-	if err := sqlDB.Close(); err != nil {
-		log.Fatalf("🔴 Error closing to database: %s", err)
+func CloseDB(db *gorm.DB) error {
+	sqlDB, err := db.DB()
+	if err != nil {
+		return fmt.Errorf("get sql db: %w", err)
 	}
-	log.Println("🟢 Database connection closed")
+	if err := sqlDB.Close(); err != nil {
+		return fmt.Errorf("close db: %w", err)
+	}
+	log.Println("[Info] Database connection closed")
+	return nil
 }

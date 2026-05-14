@@ -34,8 +34,15 @@ func run() error {
 		return fmt.Errorf("load .env: %w", err)
 	}
 
-	dbConnection := db.NewDB()
-	defer db.CloseDB(dbConnection)
+	dbConnection, err := db.NewDB()
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err := db.CloseDB(dbConnection); err != nil {
+			log.Println(err)
+		}
+	}()
 
 	welcomeRepository := repository.NewWelcomeRepository(dbConnection)
 	welcomeUsecase := usecase.NewWelcomeUsecase(welcomeRepository)

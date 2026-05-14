@@ -1,29 +1,29 @@
 package test
 
 import (
-	"log"
 	"testing"
 	"time"
 
+	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 
 	"github.com/yamamoto99/go-template/app/infrastructure/db"
 	"github.com/yamamoto99/go-template/app/internal/entity"
-
-	"github.com/joho/godotenv"
 )
 
 func loadEnvFile(t *testing.T) {
-	err := godotenv.Load("../../../.env")
-	if err != nil {
-		log.Fatalln(err)
+	if err := godotenv.Load("../../../.env"); err != nil {
+		t.Fatalf("Error loading .env file: %v", err)
 	}
 }
 
 func SetupTestDB(t *testing.T) *gorm.DB {
 	loadEnvFile(t)
 
-	dbConn := db.NewTestDB()
+	dbConn, err := db.NewTestDB()
+	if err != nil {
+		t.Fatalf("Error connecting to test database: %v", err)
+	}
 	tx := dbConn.Begin()
 	if tx.Error != nil {
 		t.Fatalf("Error beginning test transaction: %v", tx.Error)
