@@ -26,7 +26,8 @@ A template repository for building Web APIs in Go with Echo, GORM, and PostgreSQ
 │   │   ├── repository/       # Persistence layer
 │   │   ├── usecase/          # Application logic
 │   │   ├── handler/          # HTTP handlers
-│   │   └── router/           # Routing
+│   │   ├── router/           # Routing
+│   │   └── logging/          # slog helpers / request-ID middleware
 │   └── test/                 # Test helpers and mocks
 ├── db/migrations/            # SQL migrations
 ├── docs/                     # GitHub Pages content
