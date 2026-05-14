@@ -18,7 +18,9 @@ A template repository for building Web APIs in Go with Echo, GORM, and PostgreSQ
 .
 ├── app/
 │   ├── cmd/                  # Entry point (main.go)
-│   ├── infrastructure/db/    # DB connection setup / teardown
+│   ├── infrastructure/
+│   │   ├── config/           # Environment-based configuration loader
+│   │   └── db/               # DB connection setup / teardown
 │   ├── internal/
 │   │   ├── entity/           # Domain models
 │   │   ├── repository/       # Persistence layer
