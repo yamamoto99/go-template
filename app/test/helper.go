@@ -47,7 +47,9 @@ func CleanupDB(t *testing.T, dbConn *gorm.DB) {
 	if err != nil {
 		t.Fatalf("Error getting DB instance: %v", err)
 	}
-	sqlDB.Close()
+	if err := sqlDB.Close(); err != nil {
+		t.Fatalf("Error closing test database connection: %v", err)
+	}
 }
 
 func SeedTestUser(t *testing.T, dbConn *gorm.DB) entity.User {
