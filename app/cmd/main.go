@@ -21,7 +21,12 @@ import (
 	"github.com/yamamoto99/go-template/app/internal/usecase"
 )
 
-const shutdownTimeout = 30 * time.Second
+const (
+	shutdownTimeout = 30 * time.Second
+	readTimeout     = 10 * time.Second
+	writeTimeout    = 30 * time.Second
+	idleTimeout     = 60 * time.Second
+)
 
 func main() {
 	if err := run(); err != nil {
@@ -54,6 +59,9 @@ func run() error {
 	welcomeUsecase := usecase.NewWelcomeUsecase(welcomeRepository)
 	welcomeHandler := handler.NewWelcomeHandler(welcomeUsecase)
 	e := router.NewRouter(welcomeHandler)
+	e.Server.ReadTimeout = readTimeout
+	e.Server.WriteTimeout = writeTimeout
+	e.Server.IdleTimeout = idleTimeout
 
 	serverErrCh := make(chan error, 1)
 	go func() {

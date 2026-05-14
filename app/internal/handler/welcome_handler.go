@@ -1,9 +1,10 @@
 package handler
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 
-	"github.com/yamamoto99/go-template/app/internal/entity"
 	"github.com/yamamoto99/go-template/app/internal/usecase"
 )
 
@@ -20,10 +21,10 @@ func NewWelcomeHandler(u usecase.WelcomeUsecase) WelcomeHandler {
 }
 
 func (h *welcomeHandler) GetRandomUser(c echo.Context) error {
-	var user *entity.User
 	user, err := h.wu.GetRandomUser(c.Request().Context())
 	if err != nil {
-		return c.JSON(500, map[string]string{"error": err.Error()})
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
-	return c.JSON(200, user)
+	return c.JSON(http.StatusOK, user)
 }

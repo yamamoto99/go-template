@@ -3,6 +3,7 @@ package handler_test
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -64,11 +65,9 @@ func TestWelcomeHandler_GetRandomUser_Error(t *testing.T) {
 
 	err := h.GetRandomUser(c)
 
-	assert.NoError(t, err)
-	assert.Equal(t, http.StatusInternalServerError, rec.Code)
-	var response map[string]string
-	err = json.Unmarshal(rec.Body.Bytes(), &response)
-	assert.NoError(t, err)
-	assert.Equal(t, expectedErr.Error(), response["error"])
+	var he *echo.HTTPError
+	assert.ErrorAs(t, err, &he)
+	assert.Equal(t, http.StatusInternalServerError, he.Code)
+	assert.NotContains(t, fmt.Sprintf("%v", he.Message), expectedErr.Error())
 	mockUsecase.AssertExpectations(t)
 }
