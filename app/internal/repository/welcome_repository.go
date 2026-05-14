@@ -4,7 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 
-	"tmp/app/internal/entity"
+	"github.com/yamamoto99/go-template/app/internal/entity"
 )
 
 type WelcomeRepository interface {

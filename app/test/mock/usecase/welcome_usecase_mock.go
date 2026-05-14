@@ -4,7 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/mock"
 
-	"tmp/app/internal/entity"
+	"github.com/yamamoto99/go-template/app/internal/entity"
 )
 
 type WelcomeUsecaseMock struct {

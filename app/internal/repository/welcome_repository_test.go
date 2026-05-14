@@ -6,8 +6,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 
-	"tmp/app/internal/repository"
-	"tmp/app/test"
+	"github.com/yamamoto99/go-template/app/internal/repository"
+	"github.com/yamamoto99/go-template/app/test"
 )
 
 func TestWelcomeRepository_GetAllUsers(t *testing.T) {

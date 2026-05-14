@@ -1,4 +1,4 @@
-.PHONY: fmt migrate-up migrate-down migrate-create help test test-setup test-repository test-usecase test-handler test-all
+.PHONY: dev fmt migrate-up migrate-down migrate-create help test test-setup test-repository test-usecase test-handler test-all
 
 # Default target
 .DEFAULT_GOAL := help
@@ -6,6 +6,9 @@
 # Colors for output
 GREEN  := $(shell tput setaf 2)
 RESET  := $(shell tput sgr0)
+
+dev: ## Run application with hot reload (air)
+	@air
 
 migrate-up: ## Run database migrations
 	@echo "--- Applying database migrations ---"

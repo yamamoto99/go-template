@@ -1,4 +1,4 @@
-FROM golang:latest
+FROM golang:1.26
 
 WORKDIR /src
 
@@ -6,10 +6,8 @@ COPY . .
 RUN go mod download
 RUN apt-get update && apt-get install -y postgresql-client
 
-WORKDIR /src/app/cmd
-
-RUN go build -o /main .
+RUN go build -o /src/main ./app/cmd
 
 EXPOSE 8080
 
-CMD ["/main"]
+CMD ["/src/main"]

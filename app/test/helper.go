@@ -7,8 +7,8 @@ import (
 
 	"gorm.io/gorm"
 
-	"tmp/app/infrastructure/db"
-	"tmp/app/internal/entity"
+	"github.com/yamamoto99/go-template/app/infrastructure/db"
+	"github.com/yamamoto99/go-template/app/internal/entity"
 
 	"github.com/joho/godotenv"
 )

@@ -4,7 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 
-	"tmp/app/internal/handler"
+	"github.com/yamamoto99/go-template/app/internal/handler"
 )
 
 func NewRouter(

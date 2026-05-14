@@ -7,8 +7,8 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"tmp/app/internal/entity"
-	"tmp/app/internal/repository"
+	"github.com/yamamoto99/go-template/app/internal/entity"
+	"github.com/yamamoto99/go-template/app/internal/repository"
 )
 
 type WelcomeUsecase interface {

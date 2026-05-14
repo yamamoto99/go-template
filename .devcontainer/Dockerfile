@@ -7,3 +7,6 @@ RUN ARCH="$(dpkg --print-architecture)" \
     | tar -xz -C /usr/local/bin migrate \
  && chmod +x /usr/local/bin/migrate \
  && migrate -version
+
+USER vscode
+RUN go install github.com/air-verse/air@latest

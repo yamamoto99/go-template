@@ -5,15 +5,15 @@ import (
 
 	"github.com/joho/godotenv"
 
-	"tmp/app/infrastructure/db"
-	"tmp/app/internal/handler"
-	"tmp/app/internal/repository"
-	"tmp/app/internal/router"
-	"tmp/app/internal/usecase"
+	"github.com/yamamoto99/go-template/app/infrastructure/db"
+	"github.com/yamamoto99/go-template/app/internal/handler"
+	"github.com/yamamoto99/go-template/app/internal/repository"
+	"github.com/yamamoto99/go-template/app/internal/router"
+	"github.com/yamamoto99/go-template/app/internal/usecase"
 )
 
 func main() {
-	err := godotenv.Load("../../.env")
+	err := godotenv.Load()
 	if err != nil {
 		log.Fatalln(err)
 	}
