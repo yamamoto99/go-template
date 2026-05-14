@@ -1,7 +1,8 @@
 package mock
 
 import (
-	"github.com/labstack/echo/v4"
+	"context"
+
 	"github.com/stretchr/testify/mock"
 
 	"github.com/yamamoto99/go-template/app/internal/entity"
@@ -11,8 +12,8 @@ type WelcomeRepositoryMock struct {
 	mock.Mock
 }
 
-func (m *WelcomeRepositoryMock) GetAllUsers(c echo.Context) ([]entity.User, error) {
-	args := m.Called(c)
+func (m *WelcomeRepositoryMock) GetAllUsers(ctx context.Context) ([]entity.User, error) {
+	args := m.Called(ctx)
 
 	if args.Get(0) == nil {
 		return nil, args.Error(1)

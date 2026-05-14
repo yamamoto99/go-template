@@ -1,11 +1,11 @@
 package usecase_test
 
 import (
+	"context"
 	"errors"
 	"testing"
 	"time"
 
-	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	testifymock "github.com/stretchr/testify/mock"
 
@@ -34,8 +34,7 @@ func TestWelcomeUsecase_GetRandomUser(t *testing.T) {
 		},
 	}
 
-	e := echo.New()
-	ctx := e.NewContext(nil, nil)
+	ctx := context.Background()
 	mockRepo.On("GetAllUsers", testifymock.Anything).Return(users, nil)
 
 	uc := usecase.NewWelcomeUsecase(mockRepo)
@@ -49,50 +48,36 @@ func TestWelcomeUsecase_GetRandomUser(t *testing.T) {
 }
 
 func TestWelcomeUsecase_GetRandomUser_EmptyUsers(t *testing.T) {
-	// モックの準備
 	mockRepo := new(appmock.WelcomeRepositoryMock)
 
-	// モックの振る舞いを設定
-	e := echo.New()
-	ctx := e.NewContext(nil, nil)
+	ctx := context.Background()
 	mockRepo.On("GetAllUsers", testifymock.Anything).Return([]entity.User{}, nil)
 
-	// テスト対象のユースケースを初期化
 	uc := usecase.NewWelcomeUsecase(mockRepo)
 
-	// テスト実行
 	user, err := uc.GetRandomUser(ctx)
 
-	// アサーション
 	assert.Error(t, err)
 	assert.Nil(t, user)
 	assert.Equal(t, "users not found", err.Error())
 
-	// モックが期待通り呼ばれたことを確認
 	mockRepo.AssertExpectations(t)
 }
 
 func TestWelcomeUsecase_GetRandomUser_Error(t *testing.T) {
-	// モックの準備
 	mockRepo := new(appmock.WelcomeRepositoryMock)
 
-	// モックの振る舞いを設定
-	e := echo.New()
-	ctx := e.NewContext(nil, nil)
+	ctx := context.Background()
 	expectedErr := errors.New("database error")
 	mockRepo.On("GetAllUsers", testifymock.Anything).Return([]entity.User{}, expectedErr)
 
-	// テスト対象のユースケースを初期化
 	uc := usecase.NewWelcomeUsecase(mockRepo)
 
-	// テスト実行
 	user, err := uc.GetRandomUser(ctx)
 
-	// アサーション
 	assert.Error(t, err)
 	assert.Nil(t, user)
 	assert.Equal(t, expectedErr, err)
 
-	// モックが期待通り呼ばれたことを確認
 	mockRepo.AssertExpectations(t)
 }

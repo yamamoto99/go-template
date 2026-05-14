@@ -1,14 +1,15 @@
 package repository
 
 import (
-	"github.com/labstack/echo/v4"
+	"context"
+
 	"gorm.io/gorm"
 
 	"github.com/yamamoto99/go-template/app/internal/entity"
 )
 
 type WelcomeRepository interface {
-	GetAllUsers(c echo.Context) ([]entity.User, error)
+	GetAllUsers(ctx context.Context) ([]entity.User, error)
 }
 
 type welcomeRepository struct {
@@ -19,9 +20,9 @@ func NewWelcomeRepository(db *gorm.DB) WelcomeRepository {
 	return &welcomeRepository{db: db}
 }
 
-func (r *welcomeRepository) GetAllUsers(c echo.Context) ([]entity.User, error) {
+func (r *welcomeRepository) GetAllUsers(ctx context.Context) ([]entity.User, error) {
 	var users []entity.User
-	result := r.db.Find(&users)
+	result := r.db.WithContext(ctx).Find(&users)
 	if result.Error != nil {
 		return nil, result.Error
 	}

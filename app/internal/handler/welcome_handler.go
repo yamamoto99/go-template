@@ -21,7 +21,7 @@ func NewWelcomeHandler(u usecase.WelcomeUsecase) WelcomeHandler {
 
 func (h *welcomeHandler) GetRandomUser(c echo.Context) error {
 	var user *entity.User
-	user, err := h.wu.GetRandomUser(c)
+	user, err := h.wu.GetRandomUser(c.Request().Context())
 	if err != nil {
 		return c.JSON(500, map[string]string{"error": err.Error()})
 	}

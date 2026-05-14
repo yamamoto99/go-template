@@ -1,9 +1,9 @@
 package repository_test
 
 import (
+	"context"
 	"testing"
 
-	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/yamamoto99/go-template/app/internal/repository"
@@ -17,9 +17,7 @@ func TestWelcomeRepository_GetAllUsers(t *testing.T) {
 	expectedUser := test.SeedTestUser(t, db)
 	repo := repository.NewWelcomeRepository(db)
 
-	e := echo.New()
-	ctx := e.NewContext(nil, nil)
-	users, err := repo.GetAllUsers(ctx)
+	users, err := repo.GetAllUsers(context.Background())
 
 	assert.NoError(t, err)
 	assert.Len(t, users, 1)
@@ -34,9 +32,7 @@ func TestWelcomeRepository_GetAllUsers_Empty(t *testing.T) {
 
 	repo := repository.NewWelcomeRepository(db)
 
-	e := echo.New()
-	ctx := e.NewContext(nil, nil)
-	users, err := repo.GetAllUsers(ctx)
+	users, err := repo.GetAllUsers(context.Background())
 
 	assert.NoError(t, err)
 	assert.Len(t, users, 0)

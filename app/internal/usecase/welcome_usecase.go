@@ -1,18 +1,17 @@
 package usecase
 
 import (
+	"context"
 	"errors"
 	"math/rand"
 	"time"
-
-	"github.com/labstack/echo/v4"
 
 	"github.com/yamamoto99/go-template/app/internal/entity"
 	"github.com/yamamoto99/go-template/app/internal/repository"
 )
 
 type WelcomeUsecase interface {
-	GetRandomUser(c echo.Context) (*entity.User, error)
+	GetRandomUser(ctx context.Context) (*entity.User, error)
 }
 
 type welcomeUsecase struct {
@@ -23,8 +22,8 @@ func NewWelcomeUsecase(r repository.WelcomeRepository) WelcomeUsecase {
 	return &welcomeUsecase{wr: r}
 }
 
-func (u *welcomeUsecase) GetRandomUser(c echo.Context) (*entity.User, error) {
-	users, err := u.wr.GetAllUsers(c)
+func (u *welcomeUsecase) GetRandomUser(ctx context.Context) (*entity.User, error) {
+	users, err := u.wr.GetAllUsers(ctx)
 	if err != nil {
 		return nil, err
 	}

@@ -1,7 +1,8 @@
 package mock
 
 import (
-	"github.com/labstack/echo/v4"
+	"context"
+
 	"github.com/stretchr/testify/mock"
 
 	"github.com/yamamoto99/go-template/app/internal/entity"
@@ -11,8 +12,8 @@ type WelcomeUsecaseMock struct {
 	mock.Mock
 }
 
-func (m *WelcomeUsecaseMock) GetRandomUser(c echo.Context) (*entity.User, error) {
-	args := m.Called(c)
+func (m *WelcomeUsecaseMock) GetRandomUser(ctx context.Context) (*entity.User, error) {
+	args := m.Called(ctx)
 
 	if args.Get(0) == nil {
 		return nil, args.Error(1)
