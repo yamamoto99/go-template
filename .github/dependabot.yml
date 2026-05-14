@@ -1,0 +1,23 @@
+version: 2
+
+# Auto-merge is intentionally NOT configured. All Dependabot PRs require human review.
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 14
+    labels:
+      - dependencies
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 14
+    labels:
+      - dependencies
+    open-pull-requests-limit: 5
