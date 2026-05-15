@@ -16,7 +16,7 @@ import (
 func NewRouter(
 	wh handler.WelcomeHandler,
 ) (*echo.Echo, error) {
-	spec, err := api.GetSwagger()
+	spec, err := api.GetSpec()
 	if err != nil {
 		return nil, fmt.Errorf("load openapi spec: %w", err)
 	}
