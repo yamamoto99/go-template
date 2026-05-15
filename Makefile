@@ -1,4 +1,4 @@
-.PHONY: dev fmt migrate-up migrate-down migrate-create help test test-setup test-repository test-usecase test-handler test-all
+.PHONY: dev fmt gen-api migrate-up migrate-down migrate-create help test test-setup test-repository test-usecase test-handler test-all
 
 # Default target
 .DEFAULT_GOAL := help
@@ -24,6 +24,11 @@ migrate-create: ## Create new migration file pair (usage: make migrate-create NA
 
 fmt: ## Format all Go code files
 	@go fmt ./...
+
+gen-api: ## Generate API code from api/openapi.yaml
+	@echo "--- Generating API code from OpenAPI spec ---"
+	@mkdir -p app/internal/api
+	@go tool oapi-codegen -config api/cfg.yaml api/openapi.yaml
 
 test-setup: ## Setup test environment
 	@echo "--- Applying test database migrations ---"

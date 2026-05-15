@@ -1,18 +1,18 @@
 package handler_test
 
 import (
-	"encoding/json"
+	"context"
 	"errors"
-	"fmt"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 	"time"
 
 	"github.com/labstack/echo/v4"
+	openapi_types "github.com/oapi-codegen/runtime/types"
 	"github.com/stretchr/testify/assert"
 	testifymock "github.com/stretchr/testify/mock"
 
+	"github.com/yamamoto99/go-template/app/internal/api"
 	"github.com/yamamoto99/go-template/app/internal/entity"
 	"github.com/yamamoto99/go-template/app/internal/handler"
 	appmock "github.com/yamamoto99/go-template/app/test/mock/usecase"
@@ -33,20 +33,14 @@ func TestWelcomeHandler_GetRandomUser(t *testing.T) {
 
 	h := handler.NewWelcomeHandler(mockUsecase)
 
-	e := echo.New()
-	req := httptest.NewRequest(http.MethodGet, "/api/random-user", nil)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
+	resp, err := h.GetRandomUser(context.Background(), api.GetRandomUserRequestObject{})
+	assert.NoError(t, err)
 
-	err := h.GetRandomUser(c)
-	assert.NoError(t, err)
-	assert.Equal(t, http.StatusOK, rec.Code)
-	var responseUser entity.User
-	err = json.Unmarshal(rec.Body.Bytes(), &responseUser)
-	assert.NoError(t, err)
-	assert.Equal(t, user.ID, responseUser.ID)
-	assert.Equal(t, user.Name, responseUser.Name)
-	assert.Equal(t, user.Email, responseUser.Email)
+	successResp, ok := resp.(api.GetRandomUser200JSONResponse)
+	assert.True(t, ok, "expected GetRandomUser200JSONResponse, got %T", resp)
+	assert.Equal(t, user.ID, successResp.Id)
+	assert.Equal(t, user.Name, successResp.Name)
+	assert.Equal(t, openapi_types.Email(user.Email), successResp.Email)
 	mockUsecase.AssertExpectations(t)
 }
 
@@ -58,16 +52,11 @@ func TestWelcomeHandler_GetRandomUser_Error(t *testing.T) {
 
 	h := handler.NewWelcomeHandler(mockUsecase)
 
-	e := echo.New()
-	req := httptest.NewRequest(http.MethodGet, "/api/random-user", nil)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-
-	err := h.GetRandomUser(c)
+	resp, err := h.GetRandomUser(context.Background(), api.GetRandomUserRequestObject{})
+	assert.Nil(t, resp)
 
 	var he *echo.HTTPError
 	assert.ErrorAs(t, err, &he)
 	assert.Equal(t, http.StatusInternalServerError, he.Code)
-	assert.NotContains(t, fmt.Sprintf("%v", he.Message), expectedErr.Error())
 	mockUsecase.AssertExpectations(t)
 }

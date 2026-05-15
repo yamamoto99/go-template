@@ -1,18 +1,29 @@
 package router
 
 import (
+	"fmt"
 	"log/slog"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	oapimiddleware "github.com/oapi-codegen/echo-middleware"
 
+	"github.com/yamamoto99/go-template/app/internal/api"
 	"github.com/yamamoto99/go-template/app/internal/handler"
 	"github.com/yamamoto99/go-template/app/internal/logging"
 )
 
 func NewRouter(
 	wh handler.WelcomeHandler,
-) *echo.Echo {
+) (*echo.Echo, error) {
+	spec, err := api.GetSwagger()
+	if err != nil {
+		return nil, fmt.Errorf("load openapi spec: %w", err)
+	}
+	// Clear servers so the validator skips host matching; otherwise requests
+	// from hosts not listed in the spec (e.g. tests, internal callers) get rejected.
+	spec.Servers = nil
+
 	e := echo.New()
 	e.HTTPErrorHandler = httpErrorHandler
 
@@ -45,12 +56,13 @@ func NewRouter(
 		},
 	}))
 	e.Use(middleware.BodyLimit("1M"))
+	e.Use(oapimiddleware.OapiRequestValidator(spec))
 	// e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 	// 	AllowOrigins: []string{"*"},
 	// 	AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
 	// }))
 
-	e.GET("/", wh.GetRandomUser)
+	api.RegisterHandlers(e, api.NewStrictHandler(wh, nil))
 
-	return e
+	return e, nil
 }

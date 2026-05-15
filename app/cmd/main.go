@@ -60,7 +60,10 @@ func run() error {
 	welcomeRepository := repository.NewWelcomeRepository(dbConnection)
 	welcomeUsecase := usecase.NewWelcomeUsecase(welcomeRepository)
 	welcomeHandler := handler.NewWelcomeHandler(welcomeUsecase)
-	e := router.NewRouter(welcomeHandler)
+	e, err := router.NewRouter(welcomeHandler)
+	if err != nil {
+		return err
+	}
 	e.Server.ReadTimeout = readTimeout
 	e.Server.WriteTimeout = writeTimeout
 	e.Server.IdleTimeout = idleTimeout
