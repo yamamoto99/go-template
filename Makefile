@@ -1,4 +1,4 @@
-.PHONY: dev fmt gen-api migrate-up migrate-down migrate-create help test test-setup test-repository test-usecase test-handler test-all
+.PHONY: dev fmt lint gen-api migrate-up migrate-down migrate-create help test test-setup test-repository test-usecase test-handler test-all
 
 # Default target
 .DEFAULT_GOAL := help
@@ -24,6 +24,9 @@ migrate-create: ## Create new migration file pair (usage: make migrate-create NA
 
 fmt: ## Format all Go code files
 	@go fmt ./...
+
+lint: ## Run golangci-lint (same as CI)
+	@golangci-lint run ./...
 
 gen-api: ## Generate API code from api/openapi.yaml
 	@echo "--- Generating API code from OpenAPI spec ---"
